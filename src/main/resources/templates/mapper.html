@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Fruntier Tools</title>
+    <meta http-equiv="Content-Type" charset="UTF-8" />
+    <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+    </style>
+    <script type="text/javascript" th:src="@{/js/mapper.js}"></script>
+</head>
+<body>
+<h1>Mapper Tool</h1>
+<div class="container">
+    <div class="left">
+        <div id="result_text"></div>
+        <div id="map" style="width:1080px;height:720px;"></div>
+        <div id="clickLatlng"></div>
+        <script type="text/javascript"
+            th:src="@{//dapi.kakao.com/v2/maps/sdk.js?appkey=99369ada4d925a3b98f6b6af5fec34c5}"></script>
+    </div>
+    
+
+    <div class="right">
+        <div class="add_state">
+            <button id="add_vertex_bt">add marker</button>
+            <button id="select_vertex_bt">select marker</button>
+            <button id="select_edge_bt">select edge</button>
+        </div><br>
+        <div class="go">
+            lat: <input type="text" id="lat">
+            lng: <input type="text" id="lng">
+            <button id="go_lat_lng">go</button>
+        </div> <br>
+
+        <div class="set_vertex">
+            Vertex: <br>
+            <form id="vertex_form">
+                <label for="vid">Id: </label>
+                <input type="text" id="vid" name="vid" disabled><br>
+
+                <label for="vlat">Lat: </label>
+                <input type="text" id="vlat" name="vlat" disabled><br>
+
+                <label for="vlng">Lng: </label>
+                <input type="text" id="vlng" name="vlng" disabled><br>
+
+                <label for="vname">Name: </label>
+                <input type="text" id="vname" name="vname"><br>
+
+                <button type="submit" id="set_vertex_bt">set vertex</button><br>
+            </form>
+            <button id="delete_vertex">delete vertex!</button>
+        </div>
+        <div class="set_edge">
+            Edge: <br>
+            <form id="edge_form">
+                <label for="eid">Id: </label>
+                <input type="text" id="eid" name="eid" disabled><br>
+
+                <label for="distance">Distance: </label>
+                <input type="text" id="distance" disabled><br>
+
+                <label for="slope">Slope: </label>
+                <input type="text" id="slope" name="slope"><br>
+
+                <label for="width">Width: </label>
+                <input type="text" id="width" name="width"><br>
+
+                <label for="population">Population: </label>
+                <input type="text" id="population" name="population"><br>
+
+                <label for="score">Subjective Score: </label>
+                <input type="text" id="score" name="score"><br>
+
+                <button id="set_edge_bt">set edge</button><br>
+            </form>
+            <button id="delete_edge">delete edge!</button>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
