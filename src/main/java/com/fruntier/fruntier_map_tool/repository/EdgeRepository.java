@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface EdgeRepository extends CrudRepository<Edge, Long> {
-    Optional<Edge> findByVstartAndVend(Vertex vstart, Vertex vend);
+    Optional<Edge> findByStartVertexAndEndVertex(Vertex startVertex, Vertex endVertex);
 
 }

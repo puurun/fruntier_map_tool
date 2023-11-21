@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Edge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long edgeId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name="start_vertex_id")
@@ -34,12 +34,12 @@ public class Edge {
         this.subjectiveScore = score;
     }
 
-    public Long getEdgeId() {
-        return edgeId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEdgeId(Long edgeId) {
-        this.edgeId = edgeId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Vertex getStartVertex() {
@@ -101,9 +101,9 @@ public class Edge {
     @Override
     public String toString() {
         return "Edge{" +
-                "edgeId=" + edgeId +
-                ", vstart=" + startVertex.getVertexId() +
-                ", vend=" + endVertex.getVertexId() +
+                "edgeId=" + id +
+                ", vstart=" + startVertex.getId() +
+                ", vend=" + endVertex.getId() +
                 ", distance=" + distance +
                 ", angle=" + slope +
                 ", width=" + width +

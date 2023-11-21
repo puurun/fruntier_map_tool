@@ -5,13 +5,9 @@ import com.fruntier.fruntier_map_tool.domain.Vertex;
 import com.fruntier.fruntier_map_tool.service.MapperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 public class MapperController {
@@ -45,7 +41,7 @@ public class MapperController {
     @PostMapping("/tool/mapper/set-vertex")
     public Long setVertex(@RequestBody VertexForm vertexForm){
         Vertex vertex = mapperService.setVertex(vertexForm);
-        return vertex.getVertexId();
+        return vertex.getId();
     }
 
     @ResponseBody
@@ -66,7 +62,7 @@ public class MapperController {
             System.out.println(e);
             return -1L;
         }
-        return edge.getEdgeId();
+        return edge.getId();
     }
 
     @ResponseBody

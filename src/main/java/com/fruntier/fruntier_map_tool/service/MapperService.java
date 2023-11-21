@@ -32,11 +32,11 @@ public class MapperService {
 
         for(Vertex v: vertexIterator){
             VertexForm vertexForm = new VertexForm();
-            vertexForm.setVid(v.getVertexId());
-            vertexForm.setVlat(v.getLat());
-            vertexForm.setVlng(v.getLng());
-            vertexForm.setVname((v.getName()));
-            vertices.put(v.getVertexId(), vertexForm);
+            vertexForm.setVid(v.getId());
+            vertexForm.setVlat(v.getLatitude());
+            vertexForm.setVlng(v.getLongitude());
+            vertexForm.setVname((v.getLocation()));
+            vertices.put(v.getId(), vertexForm);
         }
 
         return vertices;
@@ -48,16 +48,16 @@ public class MapperService {
 
         for(Edge e: edgeIterator){
             EdgeForm edgeForm = new EdgeForm();
-            edgeForm.setVstartId(e.getStartVertex().getVertexId());
-            edgeForm.setVendId(e.getEndVertex().getVertexId());
-            edgeForm.setEid(e.getEdgeId());
+            edgeForm.setVstartId(e.getStartVertex().getId());
+            edgeForm.setVendId(e.getEndVertex().getId());
+            edgeForm.setEid(e.getId());
             edgeForm.setDistance(e.getDistance());
             edgeForm.setSlope(e.getSlope());
             edgeForm.setWidth(e.getWidth());
             edgeForm.setPopulation(e.getPopulation());
             edgeForm.setScore(e.getSubjectiveScore());
 
-            edges.put(e.getEdgeId(), edgeForm);
+            edges.put(e.getId(), edgeForm);
         }
 
         return edges;
@@ -68,8 +68,8 @@ public class MapperService {
         Vertex vertex;
         if(vertexOptional.isPresent()){
             vertex = vertexOptional.get();
-            vertex.setLat(vertexForm.getVlat());
-            vertex.setLng(vertexForm.getVlng());
+            vertex.setLatitude(vertexForm.getVlat());
+            vertex.setLongitude(vertexForm.getVlng());
             vertex = vertexRepository.save(vertexOptional.get());
         }
         else{
@@ -156,7 +156,7 @@ public class MapperService {
         }
         Edge edge = edgeOptional.get();
 
-        Optional<Edge> otherEdge = edgeRepository.findByVstartAndVend(
+        Optional<Edge> otherEdge = edgeRepository.findByStartVertexAndEndVertex(
                 edge.getEndVertex(),
                 edge.getStartVertex()
         );

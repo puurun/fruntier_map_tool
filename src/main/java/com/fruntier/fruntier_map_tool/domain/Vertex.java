@@ -9,15 +9,15 @@ import java.util.List;
 public class Vertex {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long vertexId;
-    private Double lat;
-    private Double lng;
-    private String name;
+    private Long id;
+    private Double latitude;
+    private Double longitude;
+    private String location;
 
-    @OneToMany(mappedBy = "vstart", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "startVertex", fetch=FetchType.LAZY)
     private List<Edge> outEdge = new ArrayList<>();
 
-    @OneToMany(mappedBy = "vend", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "endVertex", fetch=FetchType.LAZY)
     private List<Edge> inEdge = new ArrayList<>();
 
 
@@ -31,34 +31,34 @@ public class Vertex {
 
     public Vertex(){}
 
-    public Vertex(Double lat, Double lng, String name) {
-        this.lat = lat;
-        this.lng = lng;
-        this.name = name;
+    public Vertex(Double latitude, Double longitude, String location) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.location = location;
     }
 
-    public Long getVertexId() {
-        return vertexId;
+    public Long getId() {
+        return id;
     }
 
-    public void setVertexId(Long vertexId) {
-        this.vertexId = vertexId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Double getLat() {
-        return lat;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setLat(Double lat) {
-        this.lat = lat;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
-    public double getLng() {
-        return lng;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLng(Double lng) {
-        this.lng = lng;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public List<Edge> getOutEdge() {
@@ -77,21 +77,21 @@ public class Vertex {
         this.inEdge = inEdge;
     }
 
-    public String getName() {
-        return name;
+    public String getLocation() {
+        return location;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
     public String toString() {
         return "Vertex{" +
-                "vertexId=" + vertexId +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                ", name='" + name + '\'' +
+                "vertexId=" + id +
+                ", lat=" + latitude +
+                ", lng=" + longitude +
+                ", name='" + location + '\'' +
                 '}';
     }
 }
