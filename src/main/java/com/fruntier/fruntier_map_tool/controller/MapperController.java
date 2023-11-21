@@ -28,12 +28,6 @@ public class MapperController {
         return "mapper";
     }
 
-    @GetMapping("/tool/example")
-    public String example(){
-        mapperService.createExample();
-        return "redirect:/";
-    }
-
     @ResponseBody
     @GetMapping("/tool/mapper/get-all-vertex")
     public ConcurrentMap<Long, VertexForm> getAllVertex(){
@@ -42,7 +36,7 @@ public class MapperController {
 
     @ResponseBody
     @GetMapping("/tool/mapper/get-all-edge")
-    public ConcurrentMap<Long, Edge> getAllEdge(){
+    public ConcurrentMap<Long, EdgeForm> getAllEdge(){
         return mapperService.getAllEdgeAsMap();
     }
 
@@ -73,6 +67,12 @@ public class MapperController {
             return -1L;
         }
         return edge.getEdgeId();
+    }
+
+    @ResponseBody
+    @PostMapping("tool/mapper/delete-edge")
+    public Boolean deleteEdge(@RequestBody EdgeForm edgeForm){
+        return mapperService.deleteEdge(edgeForm);
     }
 
 }

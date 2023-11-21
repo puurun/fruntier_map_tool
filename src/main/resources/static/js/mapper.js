@@ -1,5 +1,5 @@
 window.onload = function() {
-    let markers = new Set();
+    let markers = {};
     let polylines = new Set();
     let cur_marker = null;
     let cur_polyline = null;
@@ -20,7 +20,7 @@ window.onload = function() {
 
     // create vertex
     kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-        if(click_state != 'add_vertex'){
+        if (click_state != 'add_vertex') {
             return;
         }
 
@@ -39,11 +39,12 @@ window.onload = function() {
 
                 marker.id = xhr.response;
                 document.getElementById("vid").value = marker.id;
+                markers[marker.id] = marker;
             }
         }
 
         xhr.onerror = () => {
-            markers.delete(marker);
+            delete markers[marker.id];
         }
 
         let send_object = {
@@ -81,7 +82,7 @@ window.onload = function() {
                 console.log("cur_marker:", cur_marker);
                 if (xhr.response == 'true') {
                     cur_marker.setMap(null);
-                    markers.delete(cur_marker);
+                    delete markers[cur_marker.id];
                     cur_marker = null;
                 }
                 console.log(markers);
@@ -92,13 +93,41 @@ window.onload = function() {
         xhr.send(send_json);
 
     })
+     // delete edge
+     document.getElementById("delete_edge").addEventListener('click', () => {
+         let send_object = {
+             eid: cur_polyline.id
+         }
+
+         let send_json = JSON.stringify(send_object);
+
+         let xhr = new XMLHttpRequest();
+         xhr.open('POST', 'mapper/delete-edge');
+         xhr.setRequestHeader('Content-Type', 'application/json');
+
+         xhr.onload = () => {
+             if (xhr.status == 200) {
+                 console.log(xhr.response);
+                 if (xhr.response == 'true') {
+                     cur_polyline.setMap(null);
+                     delete polylines[cur_polyline];
+                     cur_polyline = null;
+                 }
+             }
+         }
+
+         xhr.send(send_json);
+
+     })
+
+
 
 
 
     // If a vertex is selected, submit vertex data on click
-    let form = document.getElementById('vertex_form');
-    form.onsubmit = () => {
-        let formData = new FormData(form);
+    let form_vertex = document.getElementById('vertex_form');
+    form_vertex.onsubmit = () => {
+        let formData = new FormData(form_vertex);
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'mapper/set-vertex');
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -106,10 +135,9 @@ window.onload = function() {
         xhr.onload = () => {
             if (xhr.status == 200) {
                 document.getElementById("result_text").innerHTML = "set vertex success!";
-
+                cur_marker['name'] = formData.get('vname');
             }
         }
-        cur_marker['name'] = formData.get('vname');
         let send_object = JSON.stringify(Object.fromEntries(formData));
         xhr.send(send_object);
 
@@ -132,6 +160,32 @@ window.onload = function() {
     })
 
 
+    let form_edge = document.getElementById("edge_form");
+    form_edge.onsubmit = () => {
+        let formData = new FormData(form_edge);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'mapper/set-edge');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = () => {
+            if (xhr.status == 200) {
+                document.getElementById("result_text").innerHTML = "set edge success!";
+                cur_polyline.slope = formData.get('slope');
+                cur_polyline.width = formData.get('width');
+                cur_polyline.population = formData.get('population');
+                cur_polyline.score = formData.get('score');
+                
+            }
+        }
+        let send_object = Object.fromEntries(formData);
+        send_object['vstartId'] = cur_polyline.vstart.id;
+        send_object['vendId'] = cur_polyline.vend.id;
+        let send_json = JSON.stringify(send_object);
+        console.log(send_json);
+        xhr.send(send_json);
+
+        return false;
+    }
 
 
 
@@ -158,9 +212,34 @@ window.onload = function() {
 
                     let marker = addVertex(value.vid, position, value.vname);
                 })
+                getAllEdge();
             }
         }
 
+        xhr.send();
+    }
+
+    function getAllEdge(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'mapper/get-all-edge');
+        xhr.onload = () => {
+            if(xhr.status == 200){
+                let response = JSON.parse(xhr.response);
+
+                Object.keys(response).forEach(key => {
+                    let value = response[key];
+
+                    if(value.vstartId > value.vendId){
+                        return;
+                    }
+                    let vstart = markers[value.vstartId];
+                    let vend = markers[value.vendId];
+
+                    let line = addEdge(value.eid, vstart, vend, value.distance,
+                        value.slope, value.width, value.population, value.score);
+                })
+            }
+        }
         xhr.send();
     }
 
@@ -179,12 +258,12 @@ window.onload = function() {
         marker.name = name;
 
         marker.setMap(map);
-        markers.add(marker);
+        markers[id] = marker;
 
 
         // callback for normal click -> select
         let clickCallback = () => {
-            if(click_state != 'select_vertex'){
+            if (click_state != 'select_vertex') {
                 return;
             }
             cur_marker = marker;
@@ -253,6 +332,11 @@ window.onload = function() {
 
 
     let addEdge = (id, vstart, vend, slope, width, population, score) => {
+        if (vstart.vid > vend.vid){
+            let temp = vstart;
+            vstart = vend;
+            vend = temp;
+        }
 
         let line = new kakao.maps.Polyline({
             map: map,
@@ -262,6 +346,7 @@ window.onload = function() {
             strokeOpacity: 1,
             strokeStyle: 'solid'
         });
+
 
         let distance = line.getLength();
 
@@ -275,7 +360,7 @@ window.onload = function() {
         line.score = score;
 
         kakao.maps.event.addListener(line, 'click', () => {
-            if(click_state != 'select_edge'){
+            if (click_state != 'select_edge') {
                 return;
             }
             cur_polyline = line;
@@ -289,6 +374,7 @@ window.onload = function() {
         });
 
         polylines.add(line);
+        cur_polyline = line;
 
         return line;
     }

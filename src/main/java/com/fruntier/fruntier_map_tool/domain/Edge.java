@@ -20,7 +20,7 @@ public class Edge {
     private int slope;
     private int width;
     private int population;
-    private double score;
+    private double subjectiveScore;
 
     public Edge(){}
 
@@ -31,7 +31,7 @@ public class Edge {
         this.slope = slope;
         this.width = width;
         this.population = population;
-        this.score = score;
+        this.subjectiveScore = score;
     }
 
     public Long getEdgeId() {
@@ -90,12 +90,12 @@ public class Edge {
         this.population = population;
     }
 
-    public double getScore() {
-        return score;
+    public double getSubjectiveScore() {
+        return subjectiveScore;
     }
 
-    public void setScore(double score) {
-        this.score = score;
+    public void setSubjectiveScore(double subjectiveScore) {
+        this.subjectiveScore = subjectiveScore;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Edge {
                 ", angle=" + slope +
                 ", width=" + width +
                 ", crowded=" + population +
-                ", score=" + score +
+                ", score=" + subjectiveScore +
                 '}';
     }
 }
