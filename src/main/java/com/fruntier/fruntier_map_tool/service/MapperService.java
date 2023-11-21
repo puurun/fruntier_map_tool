@@ -48,8 +48,8 @@ public class MapperService {
 
         for(Edge e: edgeIterator){
             EdgeForm edgeForm = new EdgeForm();
-            edgeForm.setVstartId(e.getVstart().getVertexId());
-            edgeForm.setVendId(e.getVend().getVertexId());
+            edgeForm.setVstartId(e.getStartVertex().getVertexId());
+            edgeForm.setVendId(e.getEndVertex().getVertexId());
             edgeForm.setEid(e.getEdgeId());
             edgeForm.setDistance(e.getDistance());
             edgeForm.setSlope(e.getSlope());
@@ -108,8 +108,8 @@ public class MapperService {
         Vertex vend = vendOptional.get();
         if(edgeOptional.isPresent()){
             edge1 = edgeOptional.get();
-            edge1.setVstart(vstart);
-            edge1.setVend(vend);
+            edge1.setStartVertex(vstart);
+            edge1.setEndVertex(vend);
             edge1.setDistance(edgeForm.getDistance());
             edge1.setSlope(edgeForm.getSlope());
             edge1.setWidth(edgeForm.getWidth());
@@ -118,8 +118,8 @@ public class MapperService {
             edge1 = edgeRepository.save(edge1);
 
             edge2 = edgeOptional.get();
-            edge2.setVstart(vend);
-            edge2.setVend(vstart);
+            edge2.setStartVertex(vend);
+            edge2.setEndVertex(vstart);
             edge2.setDistance(edgeForm.getDistance());
             edge2.setSlope(-edgeForm.getSlope());
             edge2.setWidth(edgeForm.getWidth());
@@ -157,8 +157,8 @@ public class MapperService {
         Edge edge = edgeOptional.get();
 
         Optional<Edge> otherEdge = edgeRepository.findByVstartAndVend(
-                edge.getVend(),
-                edge.getVstart()
+                edge.getEndVertex(),
+                edge.getStartVertex()
         );
         System.out.println("edge = " + edge);
         System.out.println("otherEdge.get() = " + otherEdge.get());

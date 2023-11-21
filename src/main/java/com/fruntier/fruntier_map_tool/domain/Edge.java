@@ -9,12 +9,12 @@ public class Edge {
     private Long edgeId;
 
     @ManyToOne
-    @JoinColumn(name="vstart_id")
-    private Vertex vstart;
+    @JoinColumn(name="start_vertex_id")
+    private Vertex startVertex;
 
     @ManyToOne
-    @JoinColumn(name="vend_id")
-    private Vertex vend;
+    @JoinColumn(name="end_vertex_id")
+    private Vertex endVertex;
 
     private double distance;
     private int slope;
@@ -24,9 +24,9 @@ public class Edge {
 
     public Edge(){}
 
-    public Edge(Vertex vstart, Vertex vend, double distance, int slope, int width, int population, double score) {
-        this.vstart = vstart;
-        this.vend = vend;
+    public Edge(Vertex startVertex, Vertex endVertex, double distance, int slope, int width, int population, double score) {
+        this.startVertex = startVertex;
+        this.endVertex = endVertex;
         this.distance = distance;
         this.slope = slope;
         this.width = width;
@@ -42,20 +42,20 @@ public class Edge {
         this.edgeId = edgeId;
     }
 
-    public Vertex getVstart() {
-        return vstart;
+    public Vertex getStartVertex() {
+        return startVertex;
     }
 
-    public void setVstart(Vertex vstart) {
-        this.vstart = vstart;
+    public void setStartVertex(Vertex startVertex) {
+        this.startVertex = startVertex;
     }
 
-    public Vertex getVend() {
-        return vend;
+    public Vertex getEndVertex() {
+        return endVertex;
     }
 
-    public void setVend(Vertex vend) {
-        this.vend = vend;
+    public void setEndVertex(Vertex endVertex) {
+        this.endVertex = endVertex;
     }
 
     public double getDistance() {
@@ -102,8 +102,8 @@ public class Edge {
     public String toString() {
         return "Edge{" +
                 "edgeId=" + edgeId +
-                ", vstart=" + vstart.getVertexId() +
-                ", vend=" + vend.getVertexId() +
+                ", vstart=" + startVertex.getVertexId() +
+                ", vend=" + endVertex.getVertexId() +
                 ", distance=" + distance +
                 ", angle=" + slope +
                 ", width=" + width +
